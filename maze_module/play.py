@@ -1,8 +1,9 @@
 from pygame.locals import *
 import pygame
 import random
-from robot import Robot
-from maze import Maze
+from maze_module.robot import Robot
+from maze_module.maze import Maze
+import os
 class App:
 
     windowWidth = 800
@@ -16,7 +17,7 @@ class App:
         self.robots = [None]*100
         self.startPos = (400, 200)
         self.goalPos = (400, 500)
-        self.maze = Maze(800, 600, "maze.png")
+        self.maze = Maze(800, 600, "./maze_module/maze.png")
         for i in range(100):
             self.robots[i] = Robot(self.maze)
             self.robots[i].x = self.startPos[0]
@@ -30,7 +31,7 @@ class App:
         pygame.display.set_caption('Evolved neural nets')
         self._running = True
         for i in range(len(self.robots)):
-            self._image_surfs[i] = pygame.image.load("robot.png").convert()
+            self._image_surfs[i] = pygame.image.load("./maze_module/robot.png").convert()
 
     def on_event(self, event):
         if event.type == QUIT:
@@ -67,9 +68,11 @@ class App:
         while( self._running ):
             step = step + 1
             pygame.event.pump()
-            for i in range(i):
+            for i in range(1):
                 inputs = self.robots[i].getSensorValues() + self.robots[i].getPieValues(self.goalPos[0], self.goalPos[1])
+                print("the inputs are {} ".format(inputs))
                 output = neuralNet.activate(inputs)
+                print("the output is {} ".format(output))
                 self.robots[i].rotate(round(output[0]))
                 self.robots[i].move(round(output[1]))
             self.on_loop()

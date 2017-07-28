@@ -4,13 +4,13 @@ import neat
 import numpy as np
 from neat import Population
 from neat.nn.feed_forward import FeedForwardNetwork
-from maze.play import App
+from maze_module.play import App
 
 from evolution.genome import EWTGenome
 from evolution.weight_transfer import transfer_weights
 
 
-def fitness(genomes, config, inputs):
+def fitness(genomes, config):
     for genome_id, genome in genomes:
         genome.fitness = 1.0
         theApp = App()

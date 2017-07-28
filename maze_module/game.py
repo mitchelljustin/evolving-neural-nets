@@ -1,5 +1,5 @@
 from robot import Robot
-from maze import Maze
+from maze_module.maze import Maze
 
 
 class Game():
