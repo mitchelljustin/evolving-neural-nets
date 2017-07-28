@@ -9,20 +9,19 @@ class App:
 
     windowWidth = 800
     windowHeight = 600
-    robots = []
+    robot = []
 
     def __init__(self):
         self._running = True
         self._display_surf = None
         self._image_surfs = [None]*100
-        self.robots = [None]*100
+        self.robot = [None]*100
         self.startPos = (400, 200)
         self.goalPos = (400, 500)
         self.maze = Maze(800, 600, "./maze_module/maze.png")
-        for i in range(100):
-            self.robots[i] = Robot(self.maze)
-            self.robots[i].x = self.startPos[0]
-            self.robots[i].y = self.startPos[1]
+        self.robot = Robot(self.maze)
+        self.robot.x = self.startPos[0]
+        self.robot.y = self.startPos[1]
 
 
     def on_init(self):
@@ -31,8 +30,7 @@ class App:
 
         pygame.display.set_caption('Evolved neural nets')
         self._running = True
-        for i in range(len(self.robots)):
-            self._image_surfs[i] = pygame.image.load("./maze_module/robot.png").convert()
+        self._image_surf = pygame.image.load("./maze_module/robot.png").convert()
 
     def on_event(self, event):
         if event.type == QUIT:
@@ -46,16 +44,15 @@ class App:
         self.maze.draw(self._display_surf)
         self._display_surf.fill((217, 33, 33), ((self.startPos[0]-10,self.startPos[1]-10), (20,20)))
         self._display_surf.fill((66, 217, 33), ((self.goalPos[0]-10,self.goalPos[1]-10), (20,20)))
-        for i in range(1):
-            self._display_surf.blit(self._image_surfs[i],(self.robots[i].x,self.robots[i].y))
-            for j in range(len(self.robots[i].old_places)-1):
-                x, y = self.robots[i].old_places[j]
-                x2, y2 = self.robots[i].old_places[j+1]
-                x = round(x)
-                y = round(y)
-                x2 = round(x2)
-                y2 = round(y2)
-                pygame.draw.line(self._display_surf, (217,0,0), (x,y), (x2,y2))
+        self._display_surf.blit(self._image_surf,(self.robot.x,self.robot.y))
+        for j in range(len(self.robot.old_places)-1):
+            x, y = self.robot.old_places[j]
+            x2, y2 = self.robot.old_places[j+1]
+            x = round(x)
+            y = round(y)
+            x2 = round(x2)
+            y2 = round(y2)
+            pygame.draw.line(self._display_surf, (217,0,0), (x,y), (x2,y2))
 
         pygame.display.flip()
 
@@ -69,13 +66,12 @@ class App:
         while( self._running ):
             step = step + 1
             pygame.event.pump()
-            for i in range(1):
-                inputs = self.robots[i].getSensorValues() + self.robots[i].getPieValues(self.goalPos[0], self.goalPos[1])
-                print("the inputs are {} ".format(inputs))
-                output = neuralNet.activate(inputs)
-                print("the output is {} ".format(output))
-                self.robots[i].rotate(round(output[0]))
-                self.robots[i].move(round(output[1]))
+            inputs = self.robot.getSensorValues() + self.robot.getPieValues(self.goalPos[0], self.goalPos[1])
+            print("the inputs are {} ".format(inputs))
+            output = neuralNet.activate(inputs)
+            print("the output is {} ".format(output))
+            self.robot.rotate(round(output[0]))
+            self.robot.move(round(output[1]))
             self.on_loop()
             # self.on_render()
             if step > 400:
