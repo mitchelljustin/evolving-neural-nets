@@ -41,7 +41,6 @@ class EWTGenome(DefaultGenome):
     def configure_new(self, config):
         super().configure_new(config)
         self.learning_rate_gene.init_attributes(config)
-        self.learning_rate_gene.learning_rate = 0.0
         self.layers.append(config.input_keys)
         for layer_size in HIDDEN_LAYER_SIZES:
             layer = []
@@ -52,6 +51,12 @@ class EWTGenome(DefaultGenome):
                 layer.append(new_node_id)
             self.layers.append(layer)
         self.layers.append(config.output_keys)
+        for i in range(1, len(self.layers)):
+            prev_layer = self.layers[i - 1]
+            cur_layer = self.layers[i]
+            for dest_node in cur_layer:
+                src_node = choice(prev_layer)
+                self.add_connection(config, src_node, dest_node, choice([1, -1]), True)
 
     def mutate_params(self, config):
         self.learning_rate_gene.mutate(config)
