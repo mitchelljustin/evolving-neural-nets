@@ -1,6 +1,7 @@
 from pygame.locals import *
 import pygame
 import random
+import time
 from maze_module.robot import Robot
 from maze_module.maze import Maze
 import os
@@ -76,9 +77,11 @@ class App:
                 self.robots[i].rotate(round(output[0]))
                 self.robots[i].move(round(output[1]))
             self.on_loop()
-            self.on_render()
+            # self.on_render()
             if step > 400:
                 self._running = False
+            if step % 20 == 0:
+                self.on_render()
         self.on_cleanup()
 
 if __name__ == "__main__" :
