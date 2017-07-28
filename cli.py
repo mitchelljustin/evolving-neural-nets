@@ -3,9 +3,11 @@ import argparse
 import os
 from datetime import datetime
 
+from evolution import evolution
+
+
 def run():
-    local_dir = os.path.dirname(__file__)
-    config_path = os.path.join(local_dir, 'evolution/neat-config.ini')
+    evolution.run()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Evolve neural networks')
