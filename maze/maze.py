@@ -1,4 +1,5 @@
 from PIL import Image
+import math
 class Maze():
     _maze_array = []
     def __init__(self,x, y, image):
@@ -16,9 +17,15 @@ class Maze():
         return
 
     def isSolid(self, x, y):
-        x = math.floor(x)
-        y = math.floor(y)
-        return self._maze_array[y][x]
+        x = round(x)
+        y = round(y)
+        if x < 0 or y < 0:
+            return True
+        if y >= len(self._maze_array):
+            return True
+        if x >= len(self._maze_array[y]):
+            return True
+        return bool(self._maze_array[y][x])
 
 
     def draw(self,display_surf):

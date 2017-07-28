@@ -18,9 +18,9 @@ class App:
         self.goalPos = (400, 500)
         self.maze = Maze(800, 600, "maze.png")
         for i in range(100):
-            self.robots[i] = Robot()
-            self.robots[i].x = random.choice(range(700))
-            self.robots[i].y = random.choice(range(500))
+            self.robots[i] = Robot(self.maze)
+            self.robots[i].x = self.startPos[0]
+            self.robots[i].y = self.startPos[1]
 
 
     def on_init(self):
@@ -44,36 +44,38 @@ class App:
         self.maze.draw(self._display_surf)
         self._display_surf.fill((217, 33, 33), ((self.startPos[0]-10,self.startPos[1]-10), (20,20)))
         self._display_surf.fill((66, 217, 33), ((self.goalPos[0]-10,self.goalPos[1]-10), (20,20)))
-        # for i in range(len(self.robots)):
-            # pygame.transform.rotate(self._image_surfs[i], self.robots[i]._rotation)
-            # self._display_surf.blit(self._image_surfs[i],(self.robots[i].x,self.robots[i].y))
+        for i in range(1):
+            self._display_surf.blit(self._image_surfs[i],(self.robots[i].x,self.robots[i].y))
+            for j in range(len(self.robots[i].old_places)-1):
+                x, y = self.robots[i].old_places[j]
+                x2, y2 = self.robots[i].old_places[j+1]
+                x = round(x)
+                y = round(y)
+                x2 = round(x2)
+                y2 = round(y2)
+                pygame.draw.line(self._display_surf, (217,0,0), (x,y), (x2,y2))
+
         pygame.display.flip()
 
     def on_cleanup(self):
         pygame.quit()
 
-    def on_execute(self):
+    def on_execute(self, neuralNet):
         if self.on_init() == False:
             self._running = False
-
+        step = 0
         while( self._running ):
+            step = step + 1
             pygame.event.pump()
-            for i in range(len(self.robots)):
-                r = random.choice(range(4))
-                self.robots[i].rotate(r)
-                if (r == 0):
-                    self.robots[i].moveRight()
-
-                if (r == 1):
-                    self.robots[i].moveLeft()
-
-                if (r == 2):
-                    self.robots[i].moveUp()
-
-                if (r == 3):
-                    self.robots[i].moveDown()
+            for i in range(i):
+                inputs = self.robots[i].getSensorValues() + self.robots[i].getPieValues(self.goalPos[0], self.goalPos[1])
+                output = neuralNet.activate(inputs)
+                self.robots[i].rotate(round(output[0]))
+                self.robots[i].move(round(output[1]))
             self.on_loop()
             self.on_render()
+            if step > 400:
+                self._running = False
         self.on_cleanup()
 
 if __name__ == "__main__" :

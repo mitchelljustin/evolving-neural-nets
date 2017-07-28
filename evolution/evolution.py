@@ -4,15 +4,18 @@ import neat
 import numpy as np
 from neat import Population
 from neat.nn.feed_forward import FeedForwardNetwork
+from maze.play import App
 
 from evolution.genome import EWTGenome
 
 
-def fitness(genomes, config):
+
+def fitness(genomes, config, inputs):
     for genome_id, genome in genomes:
         genome.fitness = 1.0
+        theApp = App()
         net = FeedForwardNetwork.create(genome, config)
-        output = net.activate(np.random.uniform(-1.0, 0.0, [10]))
+        theApp.on_execute(net)
         pass
 
 

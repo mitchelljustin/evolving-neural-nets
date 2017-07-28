@@ -9,27 +9,24 @@ class Robot():
     sensor_angles = [0,0,0,0,0,0]
     x = 0
     y = 0
-
-    def __init__(self):
+    old_places = []
+    maze = None
+    def __init__(self, maze):
+        self.maze = maze
         return
 
-
-    def moveRight(self):
-        self.x = self.x + self.speed
-
-    def moveLeft(self):
-        self.x = self.x - self.speed
-
-    def moveUp(self):
-        self.y = self.y - self.speed
-
-    def moveDown(self):
-        self.y = self.y + self.speed
+    def move(self, direction):
+        self.old_places.append((self.x,self.y))
+        new_x = self.x + direction*self.speed*math.sin(math.radians(self._rotation))
+        new_y = self.y + direction*self.speed*math.cos(math.radians(self._rotation))
+        if not self.maze.isSolid(new_x, new_y):
+            self.x = new_x
+            self.y = new_y
 
     def _get_sensor_angle(self, index):
         # the first 5 [0..4] sensors are front ones, each separated by 36 degrees
         if index < 5:
-            return (180-(36*i) + self._rotation) % 360
+            return (180-(45*index) + self._rotation) % 360
         return (270+self._rotation) % 360
 
     def _get_pie_start_end(self, index):
@@ -48,21 +45,22 @@ class Robot():
     def getRotation(self):
         return self._rotation % 360
 
-    def getSensorValues(self, maze):
+    def getSensorValues(self):
         # returns sensor array
         for i in range(len(self.sensor_angles)):
-            self.sensor_angles[i] = _get_sensor_angle(self, i)
+            self.sensor_angles[i] = self._get_sensor_angle(i)
         sensor_values = [0]*6
-        for i in rangel(len(sensor_values)):
+        for i in range(len(sensor_values)):
             angle = self.sensor_angles[i]
             x1 = self.x
             y1 = self.y
-            for j in range(10000):
+            for j in range(1000):
                 x2 = x1 + j * math.cos(math.radians(angle))
                 y2 = y1 + j * math.sin(math.radians(angle))
-                if maze.isSolid(x2, y2):
+                if self.maze.isSolid(x2, y2):
                     sensor_values[i] = j
-        return sensors
+                    break
+        return sensor_values
 
     def getPieValues(self, goal_x, goal_y):
         dx = goal_x - self.x
