@@ -7,7 +7,7 @@ from neat.nn.feed_forward import FeedForwardNetwork
 from maze.play import App
 
 from evolution.genome import EWTGenome
-
+from evolution.weight_transfer import transfer_weights
 
 
 def fitness(genomes, config, inputs):
@@ -16,8 +16,6 @@ def fitness(genomes, config, inputs):
         theApp = App()
         net = FeedForwardNetwork.create(genome, config)
         theApp.on_execute(net)
-        pass
-
 
 def run():
     local_dir = os.path.dirname(__file__)

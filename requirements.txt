@@ -1,3 +1,6 @@
+neat-python==0.91
+numpy==1.13.1
 olefile==0.44
 Pillow==4.2.1
 pygame==1.9.3
+scipy==0.19.1
