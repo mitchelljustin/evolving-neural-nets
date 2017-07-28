@@ -6,6 +6,7 @@ from neat import Population
 from neat.nn.feed_forward import FeedForwardNetwork
 
 from evolution.genome import EWTGenome
+from evolution.weight_transfer import transfer_weights
 
 
 def fitness(genomes, config):
@@ -13,8 +14,10 @@ def fitness(genomes, config):
         genome.fitness = len(genome.connections)
         net = FeedForwardNetwork.create(genome, config)
         output = net.activate(np.random.uniform(-1.0, 0.0, [10]))
-        if len(genome.connections) > 25:
-            pass
+    g1 = genomes[0][1]
+    g2 = genomes[1][1]
+    if g1.fitness > 15:
+        transfer_weights(g1, g2)
 
 
 def run():
