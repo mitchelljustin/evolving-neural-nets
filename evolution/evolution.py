@@ -10,10 +10,11 @@ from evolution.genome import EWTGenome
 
 def fitness(genomes, config):
     for genome_id, genome in genomes:
-        genome.fitness = 1.0
+        genome.fitness = len(genome.connections)
         net = FeedForwardNetwork.create(genome, config)
         output = net.activate(np.random.uniform(-1.0, 0.0, [10]))
-        pass
+        if len(genome.connections) > 25:
+            pass
 
 
 def run():
