@@ -30,7 +30,7 @@ class Evolution:
         start = time.time()
         net = FeedForwardNetwork.create(genome, config)
         app.reset()
-        result = app.execute([net])
+        result = app.execute([net])[0]
         end = time.time()
         print('Genome {} in {:.2f}s'.format(genome_id, end - start))
         return result

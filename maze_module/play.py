@@ -69,6 +69,7 @@ class App:
         robots = []
         for i in range(len(neuralNets)):
             robots.append(Robot(self.maze, neuralNets[i], self.colors[i%5]))
+        return robots
 
 
     def execute(self, neuralNets):
@@ -86,7 +87,7 @@ class App:
                 robot.rotate(round(left_right))
                 robot.move(round(fwd_back))
                 if step in BEHAVIOUR_SAMPLE_STEP_NUMS:
-                    behaviour.append((self.robot.x, self.robot.y))
+                    behaviour.append((robot.x, robot.y))
                 if self.render and step % 30 == 0:
                     self.on_render()
         for robot in self.robots:
@@ -94,5 +95,5 @@ class App:
             objective_value = 640 - distance.euclidean(robot_pos, self.goalPos)
             behaviour = np.array(behaviour).reshape([len(BEHAVIOUR_SAMPLE_STEP_NUMS) * 2])
             results.append(np.concatenate([behaviour, [objective_value]], -1))
-        self.reste()
+        self.reset()
         return results
