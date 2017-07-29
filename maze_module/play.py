@@ -22,7 +22,6 @@ class App:
         self._running = True
         self._display_surf = None
         self._image_surfs = [None] * 100
-        self.robot = [None] * 100
         self.goalPos = (400, 500)
         self.startPos = (400, 200)
         self.maze = Maze(800, 600, "./maze_module/maze.png")
@@ -79,14 +78,11 @@ class App:
             self.robot.move(round(fwd_back))
             if step in BEHAVIOUR_SAMPLE_STEP_NUMS:
                 behaviour.append((self.robot.x, self.robot.y))
-            if self.render and step % 20 == 0:
+            if self.render and step % 30 == 0:
                 self.on_render()
-        self.on_cleanup()
-        objective_value = 640 - distance.euclidean((self.robot.x, self.robot.y), self.goalPos)
+        robot_pos = (self.robot.x, self.robot.y)
+        objective_value = 640 - distance.euclidean(robot_pos, self.goalPos)
         behaviour = np.array(behaviour).reshape([len(BEHAVIOUR_SAMPLE_STEP_NUMS) * 2])
-        return np.concatenate([behaviour, [objective_value]], -1)
-
-
-if __name__ == "__main__":
-    theApp = App()
-    theApp.on_execute()
+        result = np.concatenate([behaviour, [objective_value]], -1)
+        self.on_cleanup()
+        return result

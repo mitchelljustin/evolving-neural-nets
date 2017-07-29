@@ -3,7 +3,7 @@ from scipy.spatial import distance
 
 NUM_NEAREST_NEIGHBOURS = 15
 
-def nslc_fitness(individuals: np.ndarray):
+def compute_nslc_scores(individuals: np.ndarray):
     '''
 
     :param individuals: Nx7 array where the first 6 columns describe behaviour, and the last one describes objective value
@@ -38,4 +38,4 @@ def nslc_fitness(individuals: np.ndarray):
 
 if __name__ == '__main__':
     individuals = np.random.uniform(0.0, 200.0, [250, 7])
-    print(nslc_fitness(individuals))
+    print(compute_nslc_scores(individuals))
