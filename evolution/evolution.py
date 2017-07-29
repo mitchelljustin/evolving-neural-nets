@@ -16,19 +16,18 @@ import time
 def run_generation(genomes, config):
     for round_no in range(10):
         results = np.zeros([len(genomes), 7])
-        theApp = App(render=False)
+        app = App(render=False)
         for i, (genome_id, genome) in enumerate(genomes):
-            genome.fitness = 1.0
             start = time.time()
             net = FeedForwardNetwork.create(genome, config)
-            result = theApp.on_execute(net)
+            app.reset()
+            result = app.on_execute(net)
             end = time.time()
-            print('Genome {}'.format(genome_id))
-            print("time elapsed is: {}".format(end-start))
+            print('Genome {} in {}'.format(genome_id, end-start))
             results[i] = result
         fitness = nslc_fitness(results)
-        print(fitness)
-        pass
+        for i, (diversity, obj_value) in enumerate(fitness):
+            genomes[i][1].fitness = diversity * (2 ** obj_value)
 
 def run():
     local_dir = os.path.dirname(__file__)
