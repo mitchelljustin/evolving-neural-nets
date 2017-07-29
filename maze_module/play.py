@@ -77,7 +77,6 @@ class App:
     def execute(self, neuralNets):
         if not self.on_init():
             self._running = False
-        behaviour = []
         results = []
         self.robots = self.create_n_robots(neuralNets)
         for step in range(END_STEP_NUM):
@@ -89,13 +88,14 @@ class App:
                 robot.rotate(round(left_right))
                 robot.move(round(fwd_back))
                 if step in BEHAVIOUR_SAMPLE_STEP_NUMS:
-                    behaviour.append((robot.x, robot.y))
+                    robot.behaviour.append((robot.x, robot.y))
                 if self.render and step % 30 == 0:
                     self.on_render()
         for robot in self.robots:
             robot_pos = (robot.x, robot.y)
             objective_value = 640 - distance.euclidean(robot_pos, self.goalPos)
-            behaviour = np.array(behaviour).reshape([len(BEHAVIOUR_SAMPLE_STEP_NUMS) * 2])
-            results.append(np.concatenate([behaviour, [objective_value]], -1))
+            behaviour = np.array(robot.behaviour).reshape([len(BEHAVIOUR_SAMPLE_STEP_NUMS) * 2])
+            result = np.concatenate([behaviour, [objective_value]], -1)
+            results.append(result)
         self.reset()
         return results

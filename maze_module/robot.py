@@ -20,7 +20,7 @@ class Robot():
         self.maze = maze
         self.neuralNet = neuralNet
         self.color = color
-        return
+        self.behaviour = []
 
     def move(self, direction):
         self.old_places.append((self.x, self.y))
