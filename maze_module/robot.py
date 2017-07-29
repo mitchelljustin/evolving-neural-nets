@@ -76,18 +76,18 @@ class Robot():
             # check old vals first
 
             found = False
-            if self.sensor_vals[i]:
-                for j in range(self.sensor_vals[i] - 10, 1000):
-                    x2 = x1 + j * cos
-                    y2 = y1 + j * sin
-                    if x2 < -20 or y2 < -20:
-                        break
-                    if y2 > 619 or x2 > 819:
-                        break
-                    if self.maze.isSolid(x2, y2):
-                        self.sensor_vals[i] = j
-                        found = True
-                        break
+            # if self.sensor_vals[i]:
+            #     for j in range(self.sensor_vals[i] - 100, 1000):
+            #         x2 = x1 + j * cos
+            #         y2 = y1 + j * sin
+            #         if x2 < -20 or y2 < -20:
+            #             break
+            #         if y2 > 619 or x2 > 819:
+            #             break
+            #         if self.maze.isSolid(x2, y2):
+            #             self.sensor_vals[i] = j
+            #             found = True
+            #             break
             if not found:
                 for j in range(1000):
                     x2 = x1 + j * cos
