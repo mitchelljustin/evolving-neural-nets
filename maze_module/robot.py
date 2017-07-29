@@ -95,7 +95,8 @@ class Robot():
                     if self.maze.isSolid(x2, y2):
                         self.sensor_vals[i] = j
                         break
-        return self.sensor_vals
+        sensor_vals_normalized = [x / 800 for x in self.sensor_vals]
+        return sensor_vals_normalized
 
     def getPieValues(self, goal_x, goal_y):
         dx = goal_x - self.x
