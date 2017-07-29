@@ -48,7 +48,7 @@ class App:
         self.maze.draw(self._display_surf)
         self._display_surf.fill((217, 33, 33), ((self.startPos[0] - 10, self.startPos[1] - 10), (20, 20)))
         self._display_surf.fill((66, 217, 33), ((self.goalPos[0] - 10, self.goalPos[1] - 10), (20, 20)))
-        for robot in self.robots:
+        for i, robot in enumerate(self.robots):
             self._display_surf.blit(self._image_surf, (robot.x, robot.y))
             for j in range(len(robot.old_places) - 1):
                 x, y = robot.old_places[j]
@@ -57,7 +57,7 @@ class App:
                 y = round(y)
                 x2 = round(x2)
                 y2 = round(y2)
-                pygame.draw.line(self._display_surf, robot.color, [x, y], [x2, y2])
+                pygame.draw.line(self._display_surf, robot.color, [x, y], [x2, y2], len(self.robots)-i)
 
         pygame.display.flip()
 
