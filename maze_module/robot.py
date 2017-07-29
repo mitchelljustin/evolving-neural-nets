@@ -17,11 +17,14 @@ class Robot():
 
     def move(self, direction):
         self.old_places.append((self.x,self.y))
-        new_x = self.x + direction*self.speed*math.sin(math.radians(self._rotation))
-        new_y = self.y + direction*self.speed*math.cos(math.radians(self._rotation))
-        if not self.maze.isSolid(new_x, new_y):
-            self.x = new_x
-            self.y = new_y
+        for i in range(self.speed):
+            new_x = self.x + direction*math.sin(math.radians(self._rotation))
+            new_y = self.y + direction*math.cos(math.radians(self._rotation))
+            if not self.maze.isSolid(new_x, new_y):
+                self.x = new_x
+                self.y = new_y
+            else:
+                break
 
     def _get_sensor_angle(self, index):
         # the first 5 [0..4] sensors are front ones, each separated by 36 degrees
