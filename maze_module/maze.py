@@ -2,26 +2,28 @@ import numpy as np
 from PIL import Image
 
 ZERO_PADDING = 20
+
+
 class Maze():
-    _maze_array = []
+  _maze_array = []
 
-    def __init__(self, width, height, image):
-        im = Image.open(image)
-        pix = im.load()
-        self.width, self.height = width, height
-        self._maze_array = np.ones([height + ZERO_PADDING * 2, width + ZERO_PADDING * 2], dtype=np.bool)
-        for i in range(height):
-            for j in range(width):
-                val = (pix[j, i] == (0, 0, 0, 255))
-                self._maze_array[i + ZERO_PADDING, j + ZERO_PADDING] = val
+  def __init__(self, width, height, image):
+    im = Image.open(image)
+    pix = im.load()
+    self.width, self.height = width, height
+    self._maze_array = np.ones([height + ZERO_PADDING * 2, width + ZERO_PADDING * 2], dtype=np.bool)
+    for i in range(height):
+      for j in range(width):
+        val = (pix[j, i] == (0, 0, 0, 255))
+        self._maze_array[i + ZERO_PADDING, j + ZERO_PADDING] = val
 
-    def isSolid(self, x, y):
-        x = round(x)
-        y = round(y)
-        return self._maze_array[y, x]
+  def isSolid(self, x, y):
+    x = round(x)
+    y = round(y)
+    return self._maze_array[y, x]
 
-    def draw(self, display_surf):
-        for y in range(len(self._maze_array)):
-            for x in range(len(self._maze_array[y])):
-                if self._maze_array[y, x]:
-                    display_surf.set_at((x, y), (0, 0, 0))
+  def draw(self, display_surf):
+    for y in range(len(self._maze_array)):
+      for x in range(len(self._maze_array[y])):
+        if self._maze_array[y, x]:
+          display_surf.set_at((x, y), (0, 0, 0))
