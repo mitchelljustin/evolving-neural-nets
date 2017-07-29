@@ -16,9 +16,9 @@ import time
 def run_generation(genomes, config):
     for round_no in range(10):
         results = np.zeros([len(genomes), 7])
+        theApp = App(render=False)
         for i, (genome_id, genome) in enumerate(genomes):
             genome.fitness = 1.0
-            theApp = App(render=False)
             start = time.time()
             net = FeedForwardNetwork.create(genome, config)
             result = theApp.on_execute(net)

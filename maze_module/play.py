@@ -1,6 +1,5 @@
 import numpy as np
 import pygame
-from maze_module.robot import Robot
 from maze_module.maze import Maze
 from maze_module.robot import Robot
 from scipy.spatial import distance
@@ -61,6 +60,9 @@ class App:
     def on_cleanup(self):
         if self.render:
             pygame.quit()
+        self.robot = Robot(self.maze)
+        self.robot.x = self.startPos[0]
+        self.robot.y = self.startPos[1]
 
     def on_execute(self, neuralNet):
         if not self.on_init():
