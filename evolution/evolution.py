@@ -73,7 +73,7 @@ class Evolution:
     population.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
-    winner = population.run(self.run_generation, 300)
+    winner = population.run(self.run_generation, 20)
 
     node_names = {
       -1: 'laser left',
