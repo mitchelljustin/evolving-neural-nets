@@ -57,7 +57,7 @@ class App:
                 y = round(y)
                 x2 = round(x2)
                 y2 = round(y2)
-                pygame.draw.line(self._display_surf, robot.color, (x, y), (x2, y2))
+                pygame.draw.line(self._display_surf, robot.color, [x, y], [x2, y2])
 
         pygame.display.flip()
 
@@ -81,16 +81,15 @@ class App:
         self.robots = self.create_n_robots(neuralNets)
         for step in range(END_STEP_NUM):
             for robot in self.robots:
-                if self.render:
-                    pygame.event.pump()
                 inputs = robot.getSensorValues() + robot.getPieValues(*self.goalPos)
                 left_right, fwd_back = robot.neuralNet.activate(inputs)
                 robot.rotate(round(left_right))
                 robot.move(round(fwd_back))
                 if step in BEHAVIOUR_SAMPLE_STEP_NUMS:
                     robot.behaviour.append((robot.x, robot.y))
-                if self.render and step % 30 == 0:
-                    self.on_render()
+            if self.render and step % 40 == 0:
+                pygame.event.pump()
+                self.on_render()
         for robot in self.robots:
             robot_pos = (robot.x, robot.y)
             objective_value = 640 - distance.euclidean(robot_pos, self.goalPos)

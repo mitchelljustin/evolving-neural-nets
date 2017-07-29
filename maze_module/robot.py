@@ -21,6 +21,12 @@ class Robot():
         self.neuralNet = neuralNet
         self.color = color
         self.behaviour = []
+        self.old_places = []
+        self.sensor_angles = [0]*6
+        self.sensor_vals = [0]*6
+        self.x = 0
+        self.y = 0
+        self._rotation = 0
 
     def move(self, direction):
         self.old_places.append((self.x, self.y))
