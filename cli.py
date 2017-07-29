@@ -6,16 +6,10 @@ from datetime import datetime
 from evolution import evolution
 
 
-def run():
-    evolution.run()
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Evolve neural networks')
+    parser.add_argument('-norender', dest='no_render', action='store_true')
 
     args = parser.parse_args()
 
-    print(f'[START] {datetime.now().isoformat()}')
-
-    run()
-
-    print(f'[DONE] {datetime.now().isoformat()}')
+    evolution.run(no_render=args.no_render)
