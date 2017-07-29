@@ -22,7 +22,6 @@ class App:
     self._running = True
     self._display_surf = None
     self._image_surfs = [None] * 100
-    self.robot = [None] * 100
     self.goalPos = (400, 500)
     self.startPos = (400, 200)
     self.maze = Maze(800, 600, "./maze_module/maze.png")
