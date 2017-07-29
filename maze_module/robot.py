@@ -4,7 +4,7 @@ import math
 class Robot():
     _rotation = 0
     speed = 10
-    MODIFIER = 10
+    MODIFIER = 45
     # 5 sensors at front at 180/5=36 degrees away from each other
     # one sensor[5] at back 90 degrees
     sensor_angles = [0, 0, 0, 0, 0, 0]
@@ -13,9 +13,13 @@ class Robot():
     old_places = []
     sensor_vals = [None]*6
     maze = None
+    color = (0,0,0)
+    neuralNet = None
 
-    def __init__(self, maze):
+    def __init__(self, maze,neuralNet, color):
         self.maze = maze
+        self.neuralNet = neuralNet
+        self.color = color
         return
 
     def move(self, direction):
