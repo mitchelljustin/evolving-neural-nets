@@ -69,6 +69,8 @@ class App:
         robots = []
         for i in range(len(neuralNets)):
             robots.append(Robot(self.maze, neuralNets[i], self.colors[i%5]))
+            robots[i].x = self.startPos[0]
+            robots[i].y = self.startPos[1]
         return robots
 
 
