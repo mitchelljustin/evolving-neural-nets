@@ -66,7 +66,6 @@ class Robot():
         dx = goal_x - self.x
         dy = goal_y - self.y
         degs = math.degrees(math.atan2(-dy, dx)) % 360
-        print(degs)
         # pie indicates which pie is lit toward the goal
         # 0: right, 1: up, 2: left, 3: down
         pies = [0]*4

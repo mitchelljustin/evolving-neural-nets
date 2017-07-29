@@ -4,6 +4,8 @@ import neat
 import numpy as np
 from neat import Population
 from neat.nn.feed_forward import FeedForwardNetwork
+
+from evolution.nslc import nslc_fitness
 from maze_module.play import App
 
 from evolution import visualize
@@ -11,12 +13,20 @@ from evolution.genome import EWTGenome
 from evolution.weight_transfer import transfer_weights
 
 
-def fitness(genomes, config):
-    for genome_id, genome in genomes:
-        genome.fitness = 1.0
-        theApp = App()
-        net = FeedForwardNetwork.create(genome, config)
-        theApp.on_execute(net)
+def run_generation(genomes, config):
+    for round_no in range(10):
+        results = np.zeros([len(genomes), 7])
+        for i, (genome_id, genome) in enumerate(genomes):
+            genome.fitness = 1.0
+            theApp = App()
+            net = FeedForwardNetwork.create(genome, config)
+            result = theApp.on_execute(net)
+            print('Genome {}'.format(genome_id))
+            results[i] = result
+        fitness = nslc_fitness(results)
+        print(fitness)
+        pass
+
 
 def run():
     local_dir = os.path.dirname(__file__)
@@ -28,7 +38,7 @@ def run():
     population.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
-    winner = population.run(fitness, 200)
+    winner = population.run(run_generation, 200)
 
     node_names = {
         -1:'laser left',
