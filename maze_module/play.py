@@ -1,12 +1,18 @@
-from pygame.locals import *
+import numpy as np
 import pygame
-import random
-import time
 from maze_module.robot import Robot
 from maze_module.maze import Maze
-import os
-class App:
+from maze_module.robot import Robot
+from scipy.spatial import distance
 
+END_STEP_NUM = 400
+BEHAVIOUR_SAMPLE_STEP_NUMS = [
+    (i + 1) * END_STEP_NUM // 3 - 1
+    for i in range(3)
+]
+
+
+class App:
     windowWidth = 800
     windowHeight = 600
     robot = []
@@ -57,27 +63,26 @@ class App:
             pygame.quit()
 
     def on_execute(self, neuralNet):
-        if self.on_init() == False:
+        if not self.on_init():
             self._running = False
-        step = 0
-        while( self._running ):
-            step = step + 1
+        behaviour = []
+        for step in range(END_STEP_NUM):
             if self.render:
                 pygame.event.pump()
-            inputs = self.robot.getSensorValues() + self.robot.getPieValues(self.goalPos[0], self.goalPos[1])
-            # print("the inputs are {} ".format(inputs))
-            output = neuralNet.activate(inputs)
-            # print("the output is {} ".format(output))
-            self.robot.rotate(round(output[0]))
-            self.robot.move(round(output[1]))
-            if step > 400:
-                self._running = False
+            inputs = self.robot.getSensorValues() + self.robot.getPieValues(*self.goalPos)
+            left_right, fwd_back = neuralNet.activate(inputs)
+            self.robot.rotate(round(left_right))
+            self.robot.move(round(fwd_back))
+            if step in BEHAVIOUR_SAMPLE_STEP_NUMS:
+                behaviour.append((self.robot.x, self.robot.y))
             if self.render:
                 if step % 20 == 0:
                     self.on_render()
         self.on_cleanup()
-        return 1
+        objective_value = 640 - distance.euclidean((self.robot.x, self.robot.y), self.goalPos)
+        behaviour = np.array(behaviour).reshape([len(BEHAVIOUR_SAMPLE_STEP_NUMS) * 2])
+        return np.concatenate([behaviour, [objective_value]], -1)
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     theApp = App()
     theApp.on_execute()
