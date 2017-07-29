@@ -10,8 +10,9 @@ class App:
     windowWidth = 800
     windowHeight = 600
     robot = []
+    render = True
 
-    def __init__(self):
+    def __init__(self, render=True):
         self._running = True
         self._display_surf = None
         self._image_surfs = [None]*100
@@ -22,22 +23,17 @@ class App:
         self.robot = Robot(self.maze)
         self.robot.x = self.startPos[0]
         self.robot.y = self.startPos[1]
+        self.render = render
 
 
     def on_init(self):
-        pygame.init()
-        self._display_surf = pygame.display.set_mode((self.windowWidth,self.windowHeight), pygame.HWSURFACE)
+        if self.render:
+            pygame.init()
+            self._display_surf = pygame.display.set_mode((self.windowWidth,self.windowHeight), pygame.HWSURFACE)
 
-        pygame.display.set_caption('Evolved neural nets')
-        self._running = True
-        self._image_surf = pygame.image.load("./maze_module/robot.png").convert()
-
-    def on_event(self, event):
-        if event.type == QUIT:
-            self._running = False
-
-    def on_loop(self):
-        pass
+            pygame.display.set_caption('Evolved neural nets')
+            self._running = True
+            self._image_surf = pygame.image.load("./maze_module/robot.png").convert()
 
     def on_render(self):
         self._display_surf.fill((255,255,255))
@@ -57,7 +53,8 @@ class App:
         pygame.display.flip()
 
     def on_cleanup(self):
-        pygame.quit()
+        if self.render:
+            pygame.quit()
 
     def on_execute(self, neuralNet):
         if self.on_init() == False:
@@ -65,20 +62,21 @@ class App:
         step = 0
         while( self._running ):
             step = step + 1
-            pygame.event.pump()
+            if self.render:
+                pygame.event.pump()
             inputs = self.robot.getSensorValues() + self.robot.getPieValues(self.goalPos[0], self.goalPos[1])
-            print("the inputs are {} ".format(inputs))
+            # print("the inputs are {} ".format(inputs))
             output = neuralNet.activate(inputs)
-            print("the output is {} ".format(output))
+            # print("the output is {} ".format(output))
             self.robot.rotate(round(output[0]))
             self.robot.move(round(output[1]))
-            self.on_loop()
-            # self.on_render()
             if step > 400:
                 self._running = False
-            if step % 20 == 0:
-                self.on_render()
+            if self.render:
+                if step % 20 == 0:
+                    self.on_render()
         self.on_cleanup()
+        return 1
 
 if __name__ == "__main__" :
     theApp = App()

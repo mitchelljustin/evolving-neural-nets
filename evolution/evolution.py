@@ -9,14 +9,20 @@ from maze_module.play import App
 from evolution import visualize
 from evolution.genome import EWTGenome
 from evolution.weight_transfer import transfer_weights
-
+import time
 
 def fitness(genomes, config):
+    outputs = []
     for genome_id, genome in genomes:
         genome.fitness = 1.0
-        theApp = App()
+        theApp = App(render=False)
         net = FeedForwardNetwork.create(genome, config)
-        theApp.on_execute(net)
+        start = time.time()
+        output = theApp.on_execute(net)
+        end = time.time()
+        print("time elapsed is: {}".format(end-start))
+        outputs.append((output, genome))
+
 
 def run():
     local_dir = os.path.dirname(__file__)
