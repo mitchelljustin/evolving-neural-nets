@@ -4,7 +4,7 @@ from neat.attributes import FloatAttribute
 from neat.genes import BaseGene, DefaultGeneConfig, DefaultNodeGene, DefaultConnectionGene
 from neat.genome import DefaultGenome, DefaultGenomeConfig
 
-HIDDEN_LAYER_SIZES = [16, 8, 8, 4, 4]
+HIDDEN_LAYER_SIZES = [10, 5, 5, 4]
 
 
 class LearningRateGene(BaseGene):

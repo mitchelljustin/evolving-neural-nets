@@ -19,7 +19,8 @@ NUM_ROUNDS_FOR_WT = 3
 
 
 class Evolution:
-    def __init__(self, fitness_function, transfer_weights, render) -> None:
+    def __init__(self, fitness_function, transfer_weights, render, fitfunc_name) -> None:
+        self.fitfunc_name = fitfunc_name
         self.transfer_weights = transfer_weights
         self.fitness_function = fitness_function
         self.render = render
@@ -64,8 +65,8 @@ class Evolution:
                         _, genome = genomes[gi]
                         app.reset()
                         nets.append(FeedForwardNetwork.create(genome, config))
-
                     app.execute(nets)
+            print(genomes[best_genomes[-1]][1])
 
     def run(self):
         local_dir = os.path.dirname(__file__)
@@ -95,5 +96,5 @@ class Evolution:
         }
         if not os.path.exists('out'):
             os.mkdir('out')
-        visualize.draw_net(config, winner, False, node_names=node_names, filename='out/network')
-        visualize.plot_stats(stats, ylog=False, view=False)
+        visualize.draw_net(config, winner, False, node_names=node_names, filename='out/network_{}.svg'.format(self.fitfunc_name))
+        visualize.plot_stats(stats, ylog=False, view=False, filename='out/fitness_{}.svg'.format(self.fitfunc_name))

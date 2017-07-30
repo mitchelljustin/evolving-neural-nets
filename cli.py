@@ -2,14 +2,15 @@
 import argparse
 
 from evolution import evolution
-from evolution.fitness import fitness_objective, fitness_novelty_search, fitness_nslc
+from evolution.fitness import fitness_objective, fitness_novelty_search, fitness_nslc1, fitness_nslc2, \
+  fitness_nslc3
 
 fitness_fns = {
   'objective': fitness_objective,
   'NS': fitness_novelty_search,
-  'NSLC1': fitness_nslc(9.0),
-  'NSLC2': fitness_nslc(3.0),
-  'NSLC3': fitness_nslc(1.0),
+  'NSLC1': fitness_nslc1,
+  'NSLC2': fitness_nslc2,
+  'NSLC3': fitness_nslc3,
 }
 
 if __name__ == '__main__':
@@ -25,6 +26,7 @@ if __name__ == '__main__':
 
   evolution.Evolution(
     fitness_function=fitness_func,
+    fitfunc_name=args.fitness_fn,
     transfer_weights=args.transfer_weights,
     render=not args.no_render,
   ).run()

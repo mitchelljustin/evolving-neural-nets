@@ -8,7 +8,7 @@ from maze_module.robot import Robot
 
 END_STEP_NUM = 400
 BEHAVIOUR_SAMPLE_STEP_NUMS = [
-    (i + 1) * END_STEP_NUM // 3 - 1
+    (i + 1) * END_STEP_NUM // 6 - 1
     for i in range(3)
 ]
 
